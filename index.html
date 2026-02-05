@@ -1,92 +1,166 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>ESAN - Trayectoria histórica</title>
-  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <meta charset="utf-8">
+    <title>ESAN - Trayectoria histórica</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 </head>
 
 <body>
-  <a-scene>
+    <a-scene>
+        <a-assets>
+            <img id="esan360" src="pasto.jpg">
+            <video id="videoUni" src="video2.mp4" loop="false" crossorigin="anonymous" playsinline webkit-playsinline></video>
+        </a-assets>
 
-    <a-assets>
-      <img id="esan360" src="gth.jpeg">
-      <video id="videoUni" src="video2.mp4" loop="false" crossorigin="anonymous" playsinline webkit-playsinline></video>
-    </a-assets>
+        <a-sky src="#esan360" rotation="0 -90 0"></a-sky>
 
-    <a-sky src="#esan360" rotation="0 -90 0"></a-sky>
+        <a-sphere
+            id="telonNegro"
+            radius="60"
+            material="color: #000; side: back; transparent: true; opacity: 0; shader: flat"
+            animation__oscurecer="property: material.opacity; to: 1; dur: 3000; startEvents: cineStart; easing: easeInOutQuad"
+            animation__aclarar="property: material.opacity; to: 0; dur: 2000; startEvents: cineEnd; easing: easeInOutQuad">
+        </a-sphere>
 
-    <a-sphere
-      id="telonNegro"
-      radius="60"
-      material="color: #000; side: back; transparent: true; opacity: 0; shader: flat"
-      animation__oscurecer="property: material.opacity; to: 1; dur: 3000; startEvents: cineStart; easing: easeInOutQuad"
-      animation__aclarar="property: material.opacity; to: 0; dur: 3000; startEvents: cineEnd; easing: easeInOutQuad">
-    </a-sphere>
+        <a-entity id="estrellas" visible="false"></a-entity>
 
-    <a-video
-      id="pantallaVideo"
-      src="#videoUni"
-      width="5"
-      height="3"
-      position="0 1.6 -30"
-      visible="false"
-      animation__entrar="property: position; to: 0 1.6 -4; dur: 8000; easing: easeOutCubic; startEvents: videoEntra"
-      animation__salir="property: position; to: 0 1.6 -30; dur: 4000; easing: easeInQuad; startEvents: videoSale">
-    </a-video>
+        <a-entity id="grupoVideo" position="0 1.6 -30" visible="false"
+            animation__entrar="property: position; to: 0 1.6 -4; dur: 6000; easing: easeOutCubic; startEvents: videoEntra"
+            animation__salir="property: position; to: 0 1.6 -30; dur: 4000; easing: easeInQuad; startEvents: videoSale">
+            
+            <a-video id="pantallaVideo" src="#videoUni" width="5" height="3"></a-video>
 
-    <a-entity
-      id="contenedorBoton"
-      position="0 1.6 -15"
-      visible="true"
-      animation="property: position; to: 0 1.6 -2.5; dur: 8000; easing: easeOutCubic; delay: 500">
+            <a-entity id="controles" position="0 -1.8 0.1">
+                
+                <a-circle id="btnAtras" class="clickable" color="#FFD700" radius="0.18" position="-1.2 0 0">
+                    <a-text value="<< 10s" align="center" color="#000" width="2"></a-text>
+                </a-circle>
 
-      <a-circle id="btnAccion" class="clickable" color="#000000" opacity="0.6" radius="0.65">
-        <a-text id="textoBoton" value="CONOCE NUESTRA\nHISTORIA" align="center" color="#FFFFFF" width="1" wrap-count="20"></a-text>
-      </a-circle>
-    </a-entity>
+                <a-circle id="btnPausa" class="clickable" color="#FFD700" radius="0.22" position="-0.6 0 0">
+                    <a-text id="txtPausa" value="PAUSA" align="center" color="#000" width="2.5"></a-text>
+                </a-circle>
 
-    <a-entity camera look-controls position="0 1.6 0">
-      <a-cursor color="#FFD700" radius="0.015" scale="0.3 0.3 0.3" raycaster="objects: .clickable"></a-cursor>
-    </a-entity>
+                <a-circle id="btnReiniciar" class="clickable" color="#4ba3ff" radius="0.22" position="0 0 0">
+                    <a-text value="RESET" align="center" color="#FFF" width="2.5"></a-text>
+                </a-circle>
 
-  </a-scene>
+                <a-circle id="btnAdelante" class="clickable" color="#FFD700" radius="0.18" position="0.6 0 0">
+                    <a-text value="10s >>" align="center" color="#000" width="2"></a-text>
+                </a-circle>
 
-  <script>
-    const video = document.querySelector('#videoUni');
-    const pantalla = document.querySelector('#pantallaVideo');
-    const contenedorBtn = document.querySelector('#contenedorBoton');
-    const btnAccion = document.querySelector('#btnAccion');
-    const telonNegro = document.querySelector('#telonNegro');
+                <a-circle id="btnDetener" class="clickable" color="#ff4b4b" radius="0.22" position="1.2 0 0">
+                    <a-text value="SALIR" align="center" color="#FFF" width="2.5"></a-text>
+                </a-circle>
+            </a-entity>
+        </a-entity>
 
-    // --- LÓGICA DE EVENTOS ---
-    btnAccion.addEventListener('click', function() {
-      contenedorBtn.setAttribute('visible', 'false');
-      telonNegro.emit('cineStart');
+        <a-entity
+            id="contenedorBoton"
+            position="0 1.6 -15"
+            visible="true"
+            animation="property: position; to: 0 1.6 -2.5; dur: 6000; easing: easeOutCubic; delay: 500">
+            <a-circle id="btnAccion" class="clickable" color="#000000" opacity="0.8" radius="0.7">
+                <a-text id="textoBoton" value="CONOCE NUESTRA\nHISTORIA" align="center" color="#FFFFFF" width="1.2" wrap-count="20"></a-text>
+            </a-circle>
+        </a-entity>
 
-      video.currentTime = 0;
-      pantalla.setAttribute('visible', 'true');
-      pantalla.emit('videoEntra');
+        <a-entity camera look-controls position="0 1.6 0">
+            <a-cursor color="#FFD700" radius="0.015" scale="0.3 0.3 0.3" raycaster="objects: .clickable"></a-cursor>
+        </a-entity>
+    </a-scene>
 
-      setTimeout(() => { video.play(); }, 1000);
-    });
+    <script>
+        const video = document.getElementById('videoUni');
+        const grupoVideo = document.querySelector('#grupoVideo');
+        const contenedorBtn = document.querySelector('#contenedorBoton');
+        const textoBoton = document.querySelector('#textoBoton');
+        const btnAccion = document.querySelector('#btnAccion');
+        const telonNegro = document.querySelector('#telonNegro');
+        const estrellasContainer = document.querySelector('#estrellas');
+        const txtPausa = document.querySelector('#txtPausa');
 
-    video.addEventListener('ended', function() {
-      telonNegro.emit('cineEnd');
-      pantalla.emit('videoSale');
+        const animEntrada = "property: position; to: 0 1.6 -2.5; dur: 6000; easing: easeOutCubic; delay: 200";
 
-      setTimeout(() => {
-        pantalla.setAttribute('visible', 'false');
-        contenedorBtn.setAttribute('visible', 'true');
-      }, 4000);
-    });
-  </script>
+        function generarEstrellas(cantidad) {
+            for (let i = 0; i < cantidad; i++) {
+                let estrella = document.createElement('a-sphere');
+                let theta = Math.random() * Math.PI * 2;
+                let phi = Math.acos((Math.random() * 2) - 1);
+                let dist = 50;
+                let x = dist * Math.sin(phi) * Math.cos(theta);
+                let y = dist * Math.sin(phi) * Math.sin(theta);
+                let z = dist * Math.cos(phi);
+                estrella.setAttribute('position', `${x} ${y} ${z}`);
+                estrella.setAttribute('radius', Math.random() * 0.15);
+                estrella.setAttribute('material', 'color: #FFF; shader: flat');
+                estrella.setAttribute('animation', {
+                    property: 'material.opacity', from: Math.random(), to: 1, dur: Math.random() * 3000 + 2000, dir: 'alternate', loop: true
+                });
+                estrellasContainer.appendChild(estrella);
+            }
+        }
+        generarEstrellas(500);
+
+        function finalizarCine() {
+            video.pause();
+            telonNegro.emit('cineEnd');
+            grupoVideo.emit('videoSale');
+            setTimeout(() => { estrellasContainer.setAttribute('visible', 'false'); }, 500);
+            setTimeout(() => {
+                grupoVideo.setAttribute('visible', 'false');
+                textoBoton.setAttribute('value', 'VUELVE A VER\nNUESTRA\nHISTORIA');
+                contenedorBtn.setAttribute('position', '0 1.6 -15');
+                contenedorBtn.removeAttribute('animation');
+                contenedorBtn.setAttribute('visible', 'true');
+                setTimeout(() => { contenedorBtn.setAttribute('animation', animEntrada); }, 100);
+            }, 2100);
+        }
+
+        btnAccion.addEventListener('click', function() {
+            contenedorBtn.setAttribute('visible', 'false');
+            telonNegro.emit('cineStart');
+            estrellasContainer.setAttribute('visible', 'true');
+            grupoVideo.setAttribute('visible', 'true');
+            grupoVideo.emit('videoEntra');
+            video.currentTime = 0;
+            video.play().catch(e => console.log("Error play:", e));
+            txtPausa.setAttribute('value', 'PAUSA');
+        });
+
+        // Lógica Pausa/Play
+        document.querySelector('#btnPausa').addEventListener('click', function() {
+            if (video.paused) {
+                video.play();
+                txtPausa.setAttribute('value', 'PAUSA');
+            } else {
+                video.pause();
+                txtPausa.setAttribute('value', 'PLAY');
+            }
+        });
+
+        // Lógica Reiniciar
+        document.querySelector('#btnReiniciar').addEventListener('click', function() {
+            video.currentTime = 0;
+            video.play();
+            txtPausa.setAttribute('value', 'PAUSA');
+        });
+
+        // Lógica Retroceder (-10 segundos)
+        document.querySelector('#btnAtras').addEventListener('click', function() {
+            video.currentTime = Math.max(0, video.currentTime - 10);
+        });
+
+        // Lógica Adelantar (+10 segundos)
+        document.querySelector('#btnAdelante').addEventListener('click', function() {
+            video.currentTime = Math.min(video.duration, video.currentTime + 10);
+        });
+
+        document.querySelector('#btnDetener').addEventListener('click', finalizarCine);
+        video.addEventListener('ended', finalizarCine);
+    </script>
 </body>
 </html>
-
-
-
-
 
 
 
