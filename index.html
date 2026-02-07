@@ -76,22 +76,7 @@
         const textoBoton = document.querySelector('#textoBoton');
         const btnAccion = document.querySelector('#btnAccion');
         const telonNegro = document.querySelector('#telonNegro');
-        const estrellasContainer = document.querySelector('#estrellas');
         const txtPausa = document.querySelector('#txtPausa');
-
-        // Generar estrellas
-        for (let i = 0; i < 500; i++) {
-            let estrella = document.createElement('a-sphere');
-            let theta = Math.random() * Math.PI * 2;
-            let phi = Math.acos((Math.random() * 2) - 1);
-            let x = 50 * Math.sin(phi) * Math.cos(theta);
-            let y = 50 * Math.sin(phi) * Math.sin(theta);
-            let z = 50 * Math.cos(phi);
-            estrella.setAttribute('position', `${x} ${y} ${z}`);
-            estrella.setAttribute('radius', Math.random() * 0.15);
-            estrella.setAttribute('material', 'color: #FFF; shader: flat');
-            estrellasContainer.appendChild(estrella);
-        }
 
         function finalizarCine() {
             video.pause();
@@ -146,6 +131,7 @@
     </script>
 </body>
 </html>
+
 
 
 
