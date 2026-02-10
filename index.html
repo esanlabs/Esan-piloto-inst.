@@ -90,19 +90,31 @@
       textoDuracion.setAttribute('value', `0:00 / ${formatearTiempo(DURACION_TOTAL)}`);
     });
 
+    // --- FUNCIÓN DE ACTUALIZACIÓN CORREGIDA ---
     function actualizarInterfaz() {
-      if (!DURACION_TOTAL || video.paused) return;
+      // Si el video no tiene duración o está pausado, no hacemos nada
+      if (!DURACION_TOTAL) return;
 
       const tiempoActual = video.currentTime;
       const progreso = tiempoActual / DURACION_TOTAL;
 
-      barraProgreso.setAttribute('width', progreso * ANCHO_BARRA);
+      // Actualizar ancho de la barra
+      barraProgreso.setAttribute('width', Math.max(0.01, progreso * ANCHO_BARRA));
+      
+      // Actualizar posición de la barra (para que crezca hacia la derecha)
       barraProgreso.setAttribute('position', `${-2.5 + (progreso * ANCHO_BARRA) / 2} -1.6 0.02`);
 
+      // Actualizar texto de tiempo
       textoDuracion.setAttribute('value', `${formatearTiempo(tiempoActual)} / ${formatearTiempo(DURACION_TOTAL)}`);
 
-      requestAnimationFrame(actualizarInterfaz);
+      // Si el video sigue reproduciéndose, pedimos el siguiente frame para suavidad total
+      if (!video.paused) {
+        requestAnimationFrame(actualizarInterfaz);
+      }
     }
+
+    // AGREGADO: Escuchar el evento nativo para asegurar que se llene siempre
+    video.addEventListener('timeupdate', actualizarInterfaz);
 
     document.querySelector('#btnAccion').addEventListener('click', () => {
       contenedorBtn.setAttribute('visible', 'false');
@@ -121,6 +133,7 @@
       telon.emit('cineEnd'); 
       textoBoton.setAttribute('value', 'VUELVE A VER\nNUESTRA HISTORIA');
       contenedorBtn.setAttribute('visible', 'true');
+      // Resetear barra visualmente
       barraProgreso.setAttribute('width', 0.01);
       barraProgreso.setAttribute('position', '-2.5 -1.6 0.02');
     }
@@ -128,8 +141,8 @@
     document.querySelector('#btnReset').addEventListener('click', () => {
       video.currentTime = 0;
       video.play();
-      actualizarInterfaz();
       txtPausa.setAttribute('value', 'PAUSA');
+      actualizarInterfaz();
     });
 
     document.querySelector('#btnSalir').addEventListener('click', volverAlMenu);
@@ -151,6 +164,7 @@
   </script>
 </body>
 </html>
+
 
 
 
